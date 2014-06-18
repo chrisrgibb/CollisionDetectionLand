@@ -86,10 +86,12 @@ Player.prototype.move2 = function(first_argument) {
 	var ay = (this.y +(this.height/2) + dY) / 32 | 0;
 
 
-	var downTile = level.getTile(this.x/32 | 0, ay);
+	var leftTile = level.getTile((this.x- (this.width/2)  )/32  | 0, ay);
+	var rightTile = level.getTile((this.x + (this.width/2))/32 | 0 , ay );
 
-	if(downTile==1){
+	if(leftTile==1 || rightTile==1){
 		this.y = (ay * 32) - (this.height/2); // -4;  // + 8 ;
+
 		this.onGround = true;
 		this.jumping = false;
 		this.canJump = true;
