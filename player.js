@@ -26,7 +26,6 @@ Player.prototype.move2 = function(first_argument) {
 		}
 		if(this.xVel > -this.speed){
 			this.xVel --;
-			// this.left = true;
 		}
 
 		dX = this.xVel;
@@ -40,7 +39,6 @@ Player.prototype.move2 = function(first_argument) {
 		}else { 
 			this.x = this.x + dX;
 		}
-
 
 	}else if( keys["right"] ){
 
@@ -65,6 +63,8 @@ Player.prototype.move2 = function(first_argument) {
 		}
 	}
 
+
+	// jumping
 	if ( keys["up"] && !this.jumping && this.canJump){
 		if(this.onGround){
 			this.canJump = false;
@@ -75,8 +75,7 @@ Player.prototype.move2 = function(first_argument) {
 	}
 
 
-	this.yVel += this.gravity;
-	
+	this.yVel += this.gravity;	
 	dY = this.yVel;
 
 
@@ -86,73 +85,30 @@ Player.prototype.move2 = function(first_argument) {
 	var ay = (this.y +(this.height/2) + dY) / 32 | 0;
 
 
-	var leftTile = level.getTile((this.x- (this.width/2)  )/32  | 0, ay);
-	var rightTile = level.getTile((this.x + (this.width/2))/32 | 0 , ay );
+	var leftTile  = level.getTile((this.x- (this.width/2)  )/32  | 0, ay);
+	var rightTile = level.getTile((this.x + (this.width/2))/32   | 0, ay );
 
 	if(leftTile==1 || rightTile==1){
-		this.y = (ay * 32) - (this.height/2); // -4;  // + 8 ;
+		this.y = (ay * 32) - (this.height/2);
 
 		this.onGround = true;
 		this.jumping = false;
 		this.canJump = true;
 		this.yVel = 0;
 	}else {
+		// must be falling
 		this.onGround = false;
 		this.y = this.y + dY;
 	}
+	// check left of screen
+	if(this.x-(this.width/2) < 0){
+		this.x = 0 + (this.width/2);
+	}
+	if(this.x+(this.width/2) > level.mapWidth()*32){
+		this.x = (level.mapWidth()*32)- (this.width/2);
+	}
 
 
-	// // check down collisions
-	// var nextY = this.y + dY - (this.height/2);
-	// var ay = (this.y +(this.height/2) + dY) / 32 | 0;
-
-
-	// var downTile = level.getTile(this.x/32 | 0, ay);
-
-	// if(downTile==1){ 
-	// 	// collision
-	// 	console.log("Colish");
-	// 	this.y = (ay * 32) - (this.height/2); // -4;  // + 8 ;
-	// 	yVel = 0;
-	// }else {
-	// 	// no collision
-	// 	this.y = this.y + dY;
-	// }
-
-
-
-	// if(keys["up"]){
-	// 	dY = 10;
-	// 	// check up collisions
-	// 	var ay = (this.y -(this.height/2) - dY) / 32 | 0;
-
-	// 	var upTile = level.getTile(this.x/32 |0, ay);
-		
-	// 	if( upTile==1) {
-	// 		this.y= ( (ay+1 ) * 32 ) + (this.height/2);
-
-	// 	}else{
-	// 		this.y = this.y - dY;
-	// 	}
-
-
-
-	// }else if(keys["down"]) {
-	// 	// dY = 10;
-	// 	// check down collisions
-	// 	var nextY = this.y + dY - (this.height/2);
-	// 	var ay = (this.y +(this.height/2) + dY) / 32 | 0;
-
-
-	// 	var downTile = level.getTile(this.x/32 | 0, ay);
-
-	// 	if(downTile==1){
-	// 		this.y = (ay * 32) - (this.height/2); // -4;  // + 8 ;
-	// 	}else {
-	// 		this.y = this.y + dY;
-	// 	}
-
-	// }
 
 }
 

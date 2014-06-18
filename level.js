@@ -26,6 +26,9 @@ var Level = function() {
 
 
 // }
+	function mapWidth(){
+		return map[0].length;
+	}
 
 	function getTile(x, y){
 		return map[y][x];
@@ -46,7 +49,8 @@ var Level = function() {
 
 
 	return { draw : draw,
-			 getTile : getTile 
+			 getTile : getTile,
+			 mapWidth : mapWidth
 			};
 
 };
