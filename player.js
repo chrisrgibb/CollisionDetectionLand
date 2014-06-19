@@ -20,6 +20,20 @@ function Player(){
 
 Player.prototype.move2 = function(first_argument) {
 	var dX, dY = 0;
+
+	if ( keys["up"] && !this.jumping && this.canJump && jumpKeyReleased){
+		
+
+		if(this.onGround){
+			this.canJump = false;
+		}
+		this.yVel = -this.speed*2;
+		this.jumping = true;
+		this.onGround = false;
+		jumpKeyReleased =false;
+	}
+
+
 	if(this.left){
 		if(this.xVel > 0){
 			this.xVel = 0;
@@ -65,17 +79,7 @@ Player.prototype.move2 = function(first_argument) {
 
 
 	// jumping
-	if ( keys["up"] && !this.jumping && this.canJump && jumpKeyReleased){
-		
 
-		if(this.onGround){
-			this.canJump = false;
-		}
-		this.yVel = -this.speed*2;
-		this.jumping = true;
-		this.onGround = false;
-		jumpKeyReleased =false;
-	}
 
 
 	this.yVel += this.gravity;	
@@ -94,8 +98,6 @@ Player.prototype.move2 = function(first_argument) {
 		}
 	}
 
-
-
 	// check down collisions
 
 
@@ -104,7 +106,7 @@ Player.prototype.move2 = function(first_argument) {
 
 
 		var leftTile  = level.getTile((this.x - (this.width/2)  )/32  | 0, ay);
-		var rightTile = level.getTile((this.x + (this.width/2) -4 )/32   | 0, ay ); // the minus for is 
+		var rightTile = level.getTile((this.x + (this.width/2) - 4 )/32   | 0, ay ); // the minus for is 
 
 		if((leftTile==1 || rightTile==1 )   ) {
 			// if(dY < 0){
@@ -134,64 +136,6 @@ Player.prototype.move2 = function(first_argument) {
 
 }
 
-Player.prototype.move = function(first_argument) {
-	var dX, dY = 0;
-	if(keys["left"]){
-		dX = -10;
-		var nextX = this.x + dX - (this.width/2) ;
-	
-
-		var ax = nextX / 32 | 0; // index of the tile to the left
-
-		var tileLeft = level.getTile(ax, this.y/32 | 0);
-		if(tileLeft==1) {
-			this.x = ( (ax+1) * 32) + (this.width/2) ; // 
-		}else { 
-			this.x = nextX;
-		}
-
-
-	}else if( keys["right"] ){
-		console.log("right here");
-		dX = 10; 
-		var ax =  (this.x + dX) / 32 | 0;
-		
-		var tileX = level.getTile(ax, this.y/32 | 0);
-		if(tileX==1){
-			console.log("colision")
-			this.x = (ax * 32) - (this.width/2);
-		}else{
-			this.x =this.x +dX;
-		}
-	}
-
-	if ( keys["up"] && !this.jumping){
-		this.yVel = -this.speed*2;
-		this.jumping = true;
-	}
-
-
-	this.yVel += this.gravity;
-	
-	dY = this.yVel;
-	// check down collisions
-	var nextY = this.y + dY - (this.height/2);
-	var ay = (this.y +(this.height/2) + dY) / 32 | 0;
-
-
-	var downTile = level.getTile(this.x/32 | 0, ay);
-
-	if(downTile==1){ 
-		// collision
-		console.log("Colish");
-		this.y = (ay * 32) - (this.height/2); // -4;  // + 8 ;
-		yVel = 0;
-	}else {
-		// no collision
-		this.y = this.y + dY;
-	}
-
-}
 
 Player.prototype.collisionRight = function(){
 	var ax = this.x / 32 | 0;
