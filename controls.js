@@ -4,6 +4,7 @@ var keys = {
 	"right" : false
 };
 
+var jumpKeyReleased=true;
 
 window.addEventListener('keydown', function(e){
 
@@ -17,9 +18,9 @@ window.addEventListener('keydown', function(e){
 						case 38:							
 							keys["up"] = true;
 							// player.canJump = false;
-
+							
 								// player.y -= 5;
-								break;
+							break;
 						case 39:
 		
 							keys["right"]= true;
@@ -57,6 +58,7 @@ window.addEventListener('keyup', function(e){
 							break;			
 						case 38:
 							keys["up"] = false;
+							jumpKeyReleased = true;
 								break;
 						case 39:
 							keys["right"] = false;

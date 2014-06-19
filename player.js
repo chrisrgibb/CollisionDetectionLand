@@ -65,18 +65,34 @@ Player.prototype.move2 = function(first_argument) {
 
 
 	// jumping
-	if ( keys["up"] && !this.jumping && this.canJump){
+	if ( keys["up"] && !this.jumping && this.canJump && jumpKeyReleased){
+		
+
 		if(this.onGround){
 			this.canJump = false;
 		}
 		this.yVel = -this.speed*2;
 		this.jumping = true;
 		this.onGround = false;
+		jumpKeyReleased =false;
 	}
 
 
 	this.yVel += this.gravity;	
 	dY = this.yVel;
+
+
+	// check up collisions 
+	if(this.jumping){
+		console.log(dY);
+		var nextY = this.y + dY + (this.height/2);
+		var ay = (this.y -(this.height/2) + dY) /32 | 0;
+		var leftTile  = level.getTile((this.x- (this.width/2)  )/32  | 0, ay);
+		var rightTile = level.getTile((this.x + (this.width/2))/32   | 0, ay );
+		if(leftTile==1 || rightTile==1){
+			this.y = ( (ay+1) * 32) + (this.height/2);
+		}
+	}
 
 
 	// dY = 10;
@@ -85,10 +101,13 @@ Player.prototype.move2 = function(first_argument) {
 	var ay = (this.y +(this.height/2) + dY) / 32 | 0;
 
 
-	var leftTile  = level.getTile((this.x- (this.width/2)  )/32  | 0, ay);
+	var leftTile  = level.getTile((this.x - (this.width/2)  )/32  | 0, ay);
 	var rightTile = level.getTile((this.x + (this.width/2))/32   | 0, ay );
 
-	if(leftTile==1 || rightTile==1){
+	if((leftTile==1 || rightTile==1 )   ) {
+		// if(dY < 0){
+		// 	console.log(dY);
+		// }
 		this.y = (ay * 32) - (this.height/2);
 
 		this.onGround = true;
