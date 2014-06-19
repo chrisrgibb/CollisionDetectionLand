@@ -3,7 +3,7 @@ function Player(){
 	this.x = 5;
 	this.y = 6;
 	this.width = 20;
-	this.height= 32;
+	this.height= 38;
 	this.yVel = 0;
 	this.xVel = 0;
 	this.speed = 5;
@@ -85,8 +85,8 @@ Player.prototype.move2 = function(first_argument) {
 	// check up collisions 
 	if(this.jumping){
 		console.log(dY);
-		var nextY = this.y + dY + (this.height/2);
-		var ay = (this.y -(this.height/2) + dY) /32 | 0;
+		var nextY = this.y + dY + (this.height/2) ;//- 10;
+		var ay = (this.y -(this.height/2) + dY - 10) /32 | 0;
 		var leftTile  = level.getTile((this.x- (this.width/2)  )/32  | 0, ay);
 		var rightTile = level.getTile((this.x + (this.width/2))/32   | 0, ay );
 		if(leftTile==1 || rightTile==1){
@@ -95,30 +95,33 @@ Player.prototype.move2 = function(first_argument) {
 	}
 
 
-	// dY = 10;
+
 	// check down collisions
-	var nextY = this.y + dY - (this.height/2);
-	var ay = (this.y +(this.height/2) + dY) / 32 | 0;
 
 
-	var leftTile  = level.getTile((this.x - (this.width/2)  )/32  | 0, ay);
-	var rightTile = level.getTile((this.x + (this.width/2))/32   | 0, ay );
+		var nextY = this.y + dY - (this.height/2);
+		var ay = (this.y +(this.height/2) + dY) / 32 | 0;
 
-	if((leftTile==1 || rightTile==1 )   ) {
-		// if(dY < 0){
-		// 	console.log(dY);
-		// }
-		this.y = (ay * 32) - (this.height/2);
 
-		this.onGround = true;
-		this.jumping = false;
-		this.canJump = true;
-		this.yVel = 0;
-	}else {
-		// must be falling
-		this.onGround = false;
-		this.y = this.y + dY;
-	}
+		var leftTile  = level.getTile((this.x - (this.width/2)  )/32  | 0, ay);
+		var rightTile = level.getTile((this.x + (this.width/2) -4 )/32   | 0, ay ); // the minus for is 
+
+		if((leftTile==1 || rightTile==1 )   ) {
+			// if(dY < 0){
+			// 	console.log(dY);
+			// }
+			this.y = (ay * 32) - (this.height/2);
+
+			this.onGround = true;
+			this.jumping = false;
+			this.canJump = true;
+			this.yVel = 0;
+		}else {
+			// must be falling
+			this.onGround = false;
+			this.y = this.y + dY;
+		}
+
 	// check left of screen
 	if(this.x-(this.width/2) < 0){
 		this.x = 0 + (this.width/2);
@@ -187,41 +190,6 @@ Player.prototype.move = function(first_argument) {
 		// no collision
 		this.y = this.y + dY;
 	}
-
-
-
-	// if(keys["up"]){
-	// 	dY = 10;
-	// 	// check up collisions
-	// 	var ay = (this.y -(this.height/2) - dY) / 32 | 0;
-
-	// 	var upTile = level.getTile(this.x/32 |0, ay);
-		
-	// 	if( upTile==1) {
-	// 		this.y= ( (ay+1 ) * 32 ) + (this.height/2);
-
-	// 	}else{
-	// 		this.y = this.y - dY;
-	// 	}
-
-
-
-	// }else if(keys["down"]) {
-	// 	dY = 10;
-	// 	// check down collisions
-	// 	var nextY = this.y + dY - (this.height/2);
-	// 	var ay = (this.y +(this.height/2) + dY) / 32 | 0;
-
-
-	// 	var downTile = level.getTile(this.x/32 | 0, ay);
-
-	// 	if(downTile==1){
-	// 		this.y = (ay * 32) - (this.height/2); // -4;  // + 8 ;
-	// 	}else {
-	// 		this.y = this.y + dY;
-	// 	}
-
-	// }
 
 }
 
