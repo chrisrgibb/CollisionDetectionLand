@@ -14,6 +14,9 @@ Game.draw = function(){
 	if(level){
 		level.draw();
 	}
+	if(debug){
+		debug.draw();
+	}
 
 }
 

@@ -15,23 +15,12 @@ function Player(){
 	this.right = false;
 	this.onGround = false;
 	this.canJump = true;
+	this.blocked = false;
 }
 
 
 Player.prototype.move2 = function(first_argument) {
 	var dX, dY = 0;
-
-	if ( keys["up"] && !this.jumping && this.canJump && jumpKeyReleased){
-		
-
-		if(this.onGround){
-			this.canJump = false;
-		}
-		this.yVel = -this.speed*2;
-		this.jumping = true;
-		this.onGround = false;
-		jumpKeyReleased =false;
-	}
 
 
 	if(this.left){
@@ -41,78 +30,68 @@ Player.prototype.move2 = function(first_argument) {
 		if(this.xVel > -this.speed){
 			this.xVel --;
 		}
-
 		dX = this.xVel;
-
-		var nextX = this.x + dX - (this.width/2) ;
-		var ax = nextX / 32 | 0; // index of the tile to the left
-
-		var tileLeft = level.getTile(ax, this.y/32 | 0);
-		if(tileLeft==1) {
-			this.x = ( (ax+1) * 32) + (this.width/2) ; // 
-		}else { 
-			this.x = this.x + dX;
-		}
-
 	}else if( keys["right"] ){
 
 		if(this.xVel< 0){
 			this.xVel = 0;
 		}
-
 		if(this.xVel < this.speed){
 			this.xVel ++;
 		}
-
 		console.log("right here");
-		dX = this.xVel;
-		var nextX = this.x + dX + (this.width/2); // the nextX 
-		var ax =  nextX / 32 | 0; // the index of the next tile 
-		
-		var tileX = level.getTile(ax, this.y/32 | 0);
-		if(tileX==1){ // collision
-			this.x = (ax * 32) - (this.width/2);
-		}else{
-			this.x =this.x +dX;
+		dX = this.xVel;		
+	}
+	if ( keys["up"] && !this.jumping && this.canJump && jumpKeyReleased){		
+		if(this.onGround){
+			this.canJump = false;
+			this.yVel = -this.speed*2;
+			this.jumping = true;
+			this.onGround = false;	
+			jumpKeyReleased =false;
 		}
 	}
 
-
-	// jumping
-
+	var tempX = this.x;
+	var tempY = this.y;
 
 
 	this.yVel += this.gravity;	
 	dY = this.yVel;
 
 
-	// check up collisions 
-	if(this.jumping){
-		console.log(dY);
+
+		// check up collisions 
+	if(this.jumping ){
+		if(this.xVel==0){
+			
+		}
+
+		// console.log(dY);
 		var nextY = this.y + dY + (this.height/2) ;//- 10;
-		var ay = (this.y -(this.height/2) + dY - 10) /32 | 0;
-		var leftTile  = level.getTile((this.x- (this.width/2)  )/32  | 0, ay);
-		var rightTile = level.getTile((this.x + (this.width/2))/32   | 0, ay );
+		var ay = (this.y -(this.height/2) + dY ) /32 | 0;
+		var leftTile  = level.getTile((5 + this.x - (this.width/2)  )/32  | 0, ay);
+		var rightTile = level.getTile(( -5 + this.x +  (this.width/2))/32   | 0, ay );
 		if(leftTile==1 || rightTile==1){
-			this.y = ( (ay+1) * 32) + (this.height/2);
+			tempY = ( (ay+1) * 32) + (this.height/2) + 2;
+			this.yVel = 0;
 		}
 	}
 
 	// check down collisions
 
-
+	// if(dY>0 ){
 		var nextY = this.y + dY - (this.height/2);
 		var ay = (this.y +(this.height/2) + dY) / 32 | 0;
+
+		
 
 
 		var leftTile  = level.getTile((this.x - (this.width/2)  )/32  | 0, ay);
 		var rightTile = level.getTile((this.x + (this.width/2) - 4 )/32   | 0, ay ); // the minus for is 
 
 		if((leftTile==1 || rightTile==1 )   ) {
-			// if(dY < 0){
-			// 	console.log(dY);
-			// }
-			this.y = (ay * 32) - (this.height/2);
+			tempY = (ay * 32) - (this.height/2);
 
 			this.onGround = true;
 			this.jumping = false;
@@ -121,15 +100,62 @@ Player.prototype.move2 = function(first_argument) {
 		}else {
 			// must be falling
 			this.onGround = false;
-			this.y = this.y + dY;
+			tempY = this.y + dY;
 		}
+	// }
+
+
+	// jumping
+		if( dX> 0){
+			//moving right
+			var nextX = this.x + dX + (this.width/2); // the nextX 
+			var ax =  nextX / 32 | 0; // the index of the next tile 
+			var yTop = (this.y - this.height/2) / 32 | 0;
+			var yBotttom = (this.y + this.height/2) / 32 | 0;
+			
+			var tileX2 = level.getTile(ax, this.y/32 | 0);
+			var tileX1 = level.getTile(ax, yTop);
+			// var tileX1 = 0;
+			// var tileX2 = level.getTile(ax, yBotttom);
+			if(tileX1==1 || tileX2==1){ // collision
+				tempX = (ax * 32) - (this.width/2);
+				xVel = 0;
+				
+			}else{
+				tempX =this.x +dX;
+			}
+		}else if( dX <0){
+			//moving left
+			var nextX = this.x + dX - (this.width/2) ;
+			var ax = nextX / 32 | 0; // index of the tile to the left
+
+			var tileLeft = level.getTile(ax, this.y/32 | 0);
+			if(tileLeft==1) {
+				tempX = ( (ax+1) * 32) + (this.width/2) ; // 
+				this.blocked = true;
+			}else { 
+				tempX = this.x + dX;
+				this.blocked = false;
+			}
+		}	
+
+
+
+	this.x = tempX;
+	this.y = tempY;
+
 
 	// check left of screen
 	if(this.x-(this.width/2) < 0){
 		this.x = 0 + (this.width/2);
 	}
+	// check right of screen
 	if(this.x+(this.width/2) > level.mapWidth()*32){
 		this.x = (level.mapWidth()*32)- (this.width/2);
+	}
+	// check bottom of screen
+	if(this.y + (this.height/2) > level.mapHeight()*32){
+		this.y = (level.mapHeight()*32)-(this.height/2);
 	}
 
 

@@ -4,7 +4,8 @@ var canvas,
 	HEIGHT,
 	player,
 	game,
-	level;
+	level,
+	debug  = new debug();
 
 
 (function() {

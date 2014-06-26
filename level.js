@@ -12,9 +12,9 @@ var Level = function() {
 		[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0],
 		[0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],
 		[0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0],
-		[0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0],
 		[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0],
-		[0,1,0,0,1,0,0,0,1,1,0,0,0,0,0,0],
+		[0,1,0,0,1,0,0,0,1,1,0,0,1,0,0,0],
 		[1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1]
 	];
 
@@ -28,6 +28,9 @@ var Level = function() {
 // }
 	function mapWidth(){
 		return map[0].length;
+	}
+	function mapHeight(){
+		return map.length;
 	}
 
 	function getTile(x, y){
@@ -51,6 +54,7 @@ var Level = function() {
 	return { draw : draw,
 			 getTile : getTile,
 			 mapWidth : mapWidth
+			 ,mapHeight : mapHeight
 			};
 
 };
