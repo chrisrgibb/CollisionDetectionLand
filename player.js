@@ -43,7 +43,7 @@ Player.prototype.move2 = function(first_argument) {
 		if(this.xVel < this.speed){
 			this.xVel ++;
 		}
-		console.log("right here");
+		// console.log("right here");
 		dX = this.xVel;		
 	}
 	if ( keys["up"] ){
@@ -76,10 +76,23 @@ Player.prototype.move2 = function(first_argument) {
 			
 		}
 
-		var nextY = this.y + dY + (this.height/2) ;//- 10;
+		// var nextY = this.y + dY + (this.height/2) ;//- 10;
 		var ay = (this.y -(this.height/2) + dY ) /32 | 0;
-		var leftTile  = level.getTile((5 + this.x - (this.width/2)  )/32  | 0, ay);
-		var rightTile = level.getTile(( -5 + this.x +  (this.width/2))/32   | 0, ay );
+
+		var left  = (  5 + this.x - (this.width/2)  )/32   | 0;
+		var right = ( -5 + this.x + (this.width/2)  )/32   | 0;
+
+		var leftTile  = level.getTile(left, ay);
+		var rightTile = level.getTile(right, ay );
+
+		if(leftTile ==1) {
+			level.addToHighLights(left, ay, "#9BF0E9");
+		}
+		if( rightTile == 1) {
+			level.addToHighLights(right, ay, "#9BF0E9");
+		}
+
+
 		if(leftTile==1 || rightTile==1){
 			tempY = ( (ay+1) * 32) + (this.height/2) + 2;
 			this.yVel = 0;
@@ -93,10 +106,21 @@ Player.prototype.move2 = function(first_argument) {
 		var ay = (this.y +(this.height/2) + dY) / 32 | 0;
 
 		
+		var left = (this.x - (this.width/2)  )/32  | 0;
+		var right = (this.x + (this.width/2) - 4 )/32   | 0;
 
 
-		var leftTile  = level.getTile((this.x - (this.width/2)  )/32  | 0, ay);
-		var rightTile = level.getTile((this.x + (this.width/2) - 4 )/32   | 0, ay ); // the minus for is 
+		var leftTile  = level.getTile(left, ay);
+		var rightTile = level.getTile(right, ay ); // the minus for is 
+
+
+		if(leftTile ==1) {
+			level.addToHighLights(left, ay, "#FDB1B1");
+		}
+		if( rightTile == 1) {
+			level.addToHighLights(right, ay, "#FDB1B1");
+		}
+
 
 		if((leftTile==1 || rightTile==1 )   ) {
 			tempY = (ay * 32) - (this.height/2);
@@ -118,7 +142,7 @@ Player.prototype.move2 = function(first_argument) {
 			//moving right
 			var nextX = this.x + dX + (this.width/2); // the nextX 
 			var ax =  nextX / 32 | 0; // the index of the next tile 
-			var yTop = (this.y - this.height/2) / 32 | 0;
+			var yTop = (3 + this.y - this.height/2) / 32 | 0;
 			var yBotttom = (-3 + this.y + this.height/2) / 32 | 0;
 			
 
@@ -127,10 +151,10 @@ Player.prototype.move2 = function(first_argument) {
 
 			// For DEBUGGINS
 			if(tileX1 ==1) {
-				level.addToHighLights(ax, yTop);
+				level.addToHighLights(ax, yTop, "white");
 			}
 			if( tileX2 == 1) {
-				level.addToHighLights(ax, yBotttom);
+				level.addToHighLights(ax, yBotttom, "white");
 			}
 
 			if(tileX1==1 || tileX2==1){ // collision
@@ -145,7 +169,7 @@ Player.prototype.move2 = function(first_argument) {
 			var nextX = this.x + dX - (this.width/2) ;
 			var ax = nextX / 32 | 0; // index of the tile to the left
 
-			var yTop = (this.y - this.height/2) / 32 | 0; 
+			var yTop = (3 + this.y - this.height/2) / 32 | 0; 
 			var yBotttom = (-3 + this.y + this.height/2) / 32 | 0;
 
 			// var tileLeft = level.getTile(ax, this.y/32 | 0);
@@ -153,7 +177,14 @@ Player.prototype.move2 = function(first_argument) {
 			var tileX2 = level.getTile(ax, yBotttom);
 			var tileX1 = level.getTile(ax, yTop);
 
-			
+			if(tileX1 ==1) {
+				level.addToHighLights(ax, yTop, "#EDE5E2");
+			}
+			if( tileX2 == 1) {
+				level.addToHighLights(ax, yBotttom, "#EDE5E2");
+			}
+
+
 			if(tileX1==1 || tileX2==1){ 
 				tempX = ( (ax+1) * 32) + (this.width/2) ; // 
 				this.blocked = true;

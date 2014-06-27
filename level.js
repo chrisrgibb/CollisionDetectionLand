@@ -20,12 +20,7 @@ var Level = function() {
 	var tilesToHighlight = [];
 
 
-// Level.init = function(){
 
-// 	// this.tileMap = 
-
-
-// }
 	function mapWidth(){
 		return map[0].length;
 	}
@@ -54,17 +49,18 @@ var Level = function() {
 
 	}
 
-	function addToHighLights(x, y){
-		var tempTile = [x, y];
+	function addToHighLights(x, y, col){
+		var tempTile = [x, y, col];
 		tilesToHighlight.push(tempTile);
 	}
 
 	function highLightTiles(){
-		ctx.fillStyle = "white";
+		ctx.fillStyle = "red";
 		for(var i =0; i< tilesToHighlight.length; i++){
-			
+			var color = tilesToHighlight[i][2];
 			var col = tilesToHighlight[i][0];
 			var row = tilesToHighlight[i][1];
+			ctx.fillStyle = color;
 			ctx.fillRect(col * 32, row * 32, 32, 32);
 		}
 		tilesToHighlight = [];
