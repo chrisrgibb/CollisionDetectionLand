@@ -76,5 +76,5 @@ window.addEventListener('keyup', function(e){
 
 							break;
 					}
-					console.log(keys);
+					// console.log(keys);
 });

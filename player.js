@@ -6,7 +6,7 @@ function Player(){
 	this.height= 38;
 	this.yVel = 0;
 	this.xVel = 0;
-	this.speed = 5;
+	this.speed = 4;
 	this.gravity = .6;
 	this.friction = .5;
 
@@ -16,12 +16,16 @@ function Player(){
 	this.onGround = false;
 	this.canJump = true;
 	this.blocked = false;
+
+	this.jumpTime = 0;
+	this.xjumpSpeed = 0;
+	this.yjumpSpeed= 0;
 }
 
 
 Player.prototype.move2 = function(first_argument) {
-	var dX, dY = 0;
-
+	var dX = 0, dY = 0;
+	level.addToHighLights(0, 0);
 
 	if(this.left){
 		if(this.xVel > 0){
@@ -42,14 +46,18 @@ Player.prototype.move2 = function(first_argument) {
 		console.log("right here");
 		dX = this.xVel;		
 	}
-	if ( keys["up"] && !this.jumping && this.canJump && jumpKeyReleased){		
-		if(this.onGround){
-			this.canJump = false;
-			this.yVel = -this.speed*2;
-			this.jumping = true;
-			this.onGround = false;	
-			jumpKeyReleased =false;
+	if ( keys["up"] ){
+		if(!this.jumping && this.canJump && jumpKeyReleased){		
+			if(this.onGround){
+				this.canJump = false;
+				this.yVel = -10;
+				this.jumping = true;
+				this.onGround = false;	
+				jumpKeyReleased =false;
+			}
 		}
+	}else{
+		this.jumpTime = 0;
 	}
 
 	var tempX = this.x;
@@ -59,6 +67,7 @@ Player.prototype.move2 = function(first_argument) {
 	this.yVel += this.gravity;	
 	dY = this.yVel;
 
+	this.collisions(this.x, this.y, dX, dY);
 
 
 		// check up collisions 
@@ -67,7 +76,6 @@ Player.prototype.move2 = function(first_argument) {
 			
 		}
 
-		// console.log(dY);
 		var nextY = this.y + dY + (this.height/2) ;//- 10;
 		var ay = (this.y -(this.height/2) + dY ) /32 | 0;
 		var leftTile  = level.getTile((5 + this.x - (this.width/2)  )/32  | 0, ay);
@@ -111,15 +119,23 @@ Player.prototype.move2 = function(first_argument) {
 			var nextX = this.x + dX + (this.width/2); // the nextX 
 			var ax =  nextX / 32 | 0; // the index of the next tile 
 			var yTop = (this.y - this.height/2) / 32 | 0;
-			var yBotttom = (this.y + this.height/2) / 32 | 0;
+			var yBotttom = (-3 + this.y + this.height/2) / 32 | 0;
 			
-			var tileX2 = level.getTile(ax, this.y/32 | 0);
+
+			var tileX2 = level.getTile(ax, yBotttom);
 			var tileX1 = level.getTile(ax, yTop);
-			// var tileX1 = 0;
-			// var tileX2 = level.getTile(ax, yBotttom);
+
+			// For DEBUGGINS
+			if(tileX1 ==1) {
+				level.addToHighLights(ax, yTop);
+			}
+			if( tileX2 == 1) {
+				level.addToHighLights(ax, yBotttom);
+			}
+
 			if(tileX1==1 || tileX2==1){ // collision
 				tempX = (ax * 32) - (this.width/2);
-				xVel = 0;
+				this.xVel = 0;
 				
 			}else{
 				tempX =this.x +dX;
@@ -129,8 +145,16 @@ Player.prototype.move2 = function(first_argument) {
 			var nextX = this.x + dX - (this.width/2) ;
 			var ax = nextX / 32 | 0; // index of the tile to the left
 
-			var tileLeft = level.getTile(ax, this.y/32 | 0);
-			if(tileLeft==1) {
+			var yTop = (this.y - this.height/2) / 32 | 0; 
+			var yBotttom = (-3 + this.y + this.height/2) / 32 | 0;
+
+			// var tileLeft = level.getTile(ax, this.y/32 | 0);
+
+			var tileX2 = level.getTile(ax, yBotttom);
+			var tileX1 = level.getTile(ax, yTop);
+
+			
+			if(tileX1==1 || tileX2==1){ 
 				tempX = ( (ax+1) * 32) + (this.width/2) ; // 
 				this.blocked = true;
 			}else { 
@@ -139,7 +163,9 @@ Player.prototype.move2 = function(first_argument) {
 			}
 		}	
 
-
+	// if ( !this.onGround ) {
+	// 	this.y = 3;
+	// }
 
 	this.x = tempX;
 	this.y = tempY;
@@ -160,6 +186,60 @@ Player.prototype.move2 = function(first_argument) {
 
 
 
+}
+
+Player.prototype.collisions = function(x, y, dx, dy){
+	var collide = false;
+	var w = (this.width/2) | 0;
+	var h = (this.height/2 ) | 0;
+	var tempX = this.x + dx;
+	var tempY = this.y + dy;
+	if(dx > 0){
+		// going right
+		if(this.isBlocking(this.x + dx + w, this.y + h)){
+			// top
+			collide = true;
+		}else if (this.isBlocking(this.x + dx + w, this.y - h)) {
+			// bottom 
+			collide = true
+		}
+		if(collide){
+			tempX = (((this.x + w) / 32 + 1) | 0 ) * 16  -1;
+		} 
+	}else if(dx < 0){
+		if(this.isBlocking(this.x + dx - w, this.y + h)){
+			collide =true;
+		}else if(this.isBlocking(this.x + dx - w, this.y - h)) {
+			collide =true;
+		}
+		if(collide){
+			tempX = (((this.x - w) / 32) | 0 ) * 32 + w;
+		} 
+	}
+	if(dy > 0){
+		// going down
+		if(this.isBlocking(this.x + w, this.y + dy + h)){
+			collide = true;
+		} else if( this.isBlocking(this.x - w, this.y + dy + h)){
+			collide = true;
+		}
+		if ( collide ) {
+			// tempY = ((this.y - h) / 32) | 0 ) * 32 
+		}
+	}
+
+	// this.x = tempX;
+
+
+
+
+}
+
+Player.prototype.isBlocking = function(xx, yy){
+	var x = xx / 32 | 0;
+	var y = yy / 32 | 0;
+	var block = level.getTile(x, y);
+	return block==1;
 }
 
 
