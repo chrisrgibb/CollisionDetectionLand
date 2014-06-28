@@ -7,8 +7,8 @@ function Player(){
 	this.yVel = 0;
 	this.xVel = 0;
 	this.speed = 4;
-	this.gravity = .6;
-	this.friction = .5;
+	this.gravity = .74;
+	this.friction = .8;
 
 	this.jumping = false;
 	this.left = false;
@@ -23,7 +23,7 @@ function Player(){
 }
 
 
-Player.prototype.move2 = function(first_argument) {
+Player.prototype.move = function(first_argument) {
 	var dX = 0, dY = 0;
 	level.addToHighLights(0, 0);
 
@@ -76,7 +76,6 @@ Player.prototype.move2 = function(first_argument) {
 			
 		}
 
-		// var nextY = this.y + dY + (this.height/2) ;//- 10;
 		var ay = (this.y -(this.height/2) + dY ) /32 | 0;
 
 		var left  = (  5 + this.x - (this.width/2)  )/32   | 0;
@@ -96,6 +95,7 @@ Player.prototype.move2 = function(first_argument) {
 		if(leftTile==1 || rightTile==1){
 			tempY = ( (ay+1) * 32) + (this.height/2) + 2;
 			this.yVel = 0;
+			dY = 0;
 		}
 	}
 
@@ -129,7 +129,7 @@ Player.prototype.move2 = function(first_argument) {
 			this.jumping = false;
 			this.canJump = true;
 			this.yVel = 0;
-		}else {
+		}else  {
 			// must be falling
 			this.onGround = false;
 			tempY = this.y + dY;

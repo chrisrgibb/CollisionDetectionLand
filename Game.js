@@ -23,7 +23,7 @@ Game.draw = function(){
 
 Game.update = function(){
 	if(player){
-		player.move2();
+		player.move();
 	}
 
 }
