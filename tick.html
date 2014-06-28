@@ -6,7 +6,7 @@
 	        	canvas{
 	        		border: 1px solid black;
               background: black;
-               padding-left: 0;
+              padding-left: 0;
               padding-right: 0;
               margin-left: auto;
               margin-right: auto;
@@ -15,6 +15,14 @@
 	        	}
             h1#title{
              text-align: center;
+            }
+            #sidebar{
+              position: relative;
+              display: block;
+              float: right;
+              border: 1px solid black;
+
+
             }
 	    </style>
 	    <noscript>
@@ -34,6 +42,9 @@
       <canvas id="canvas" width="500" height ="500">
 
       </canvas>
+      <div id="sidebar">
+        use arrow keys to move.
+        press up arrow to jump.</div>
 
     </body>
        <script src="level.js"></script>
