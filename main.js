@@ -4,9 +4,7 @@ var canvas,
 	HEIGHT,
 	player,
 	game,
-	level,
-	debug  = new debug();
-
+	level;
 
 (function() {
     var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;

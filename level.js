@@ -54,7 +54,7 @@ var Level = function() {
 		var tempTile = [x, y, col];
 		tilesToHighlight.push(tempTile);
 	}
-
+	// draws tiles different colors
 	function highLightTiles(){
 		ctx.fillStyle = "red";
 		for(var i =0; i< tilesToHighlight.length; i++){

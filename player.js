@@ -65,14 +65,11 @@ Player.prototype.move = function(first_argument) {
 	this.yVel += this.gravity;	
 	dY = this.yVel;
 
-	this.collisions(this.x, this.y, dX, dY);
+	// this.collisions(this.x, this.y, dX, dY);
 
 
-		// check up collisions 
+	// check up collisions 
 	if(this.jumping ){
-		if(this.xVel==0){
-			
-		}
 
 		var ay = (this.y -(this.height/2) + dY ) /32 | 0;
 
@@ -166,7 +163,6 @@ Player.prototype.move = function(first_argument) {
 			var yTop = (3 + this.y - this.height/2) / 32 | 0; 
 			var yBotttom = (-3 + this.y + this.height/2) / 32 | 0;
 
-			// var tileLeft = level.getTile(ax, this.y/32 | 0);
 
 			var tileX2 = level.getTile(ax, yBotttom);
 			var tileX1 = level.getTile(ax, yTop);
@@ -204,11 +200,9 @@ Player.prototype.move = function(first_argument) {
 	if(this.y + (this.height/2) > level.mapHeight()*32){
 		this.y = (level.mapHeight()*32)-(this.height/2);
 	}
-
-
-
 }
 
+// function not actually used
 Player.prototype.collisions = function(x, y, dx, dy){
 	var collide = false;
 	var w = (this.width/2) | 0;
@@ -248,12 +242,6 @@ Player.prototype.collisions = function(x, y, dx, dy){
 			// tempY = ((this.y - h) / 32) | 0 ) * 32 
 		}
 	}
-
-	// this.x = tempX;
-
-
-
-
 }
 
 Player.prototype.isBlocking = function(xx, yy){
