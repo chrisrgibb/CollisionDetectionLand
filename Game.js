@@ -8,11 +8,11 @@ Game.draw = function(){
 	ctx.fillStyle = "black";
 	ctx.fillRect(0, 0 , WIDTH, HEIGHT);
 
-	if(player){
-		player.draw(ctx);
-	}
 	if(level){
 		level.draw();
+	}
+	if(player){
+		player.draw(ctx); 
 	}
 	if(debug){
 		debug.draw();

@@ -25,7 +25,6 @@ function Player(){
 
 Player.prototype.move = function(first_argument) {
 	var dX = 0, dY = 0;
-	level.addToHighLights(0, 0);
 
 	if(this.left){
 		if(this.xVel > 0){
@@ -43,7 +42,6 @@ Player.prototype.move = function(first_argument) {
 		if(this.xVel < this.speed){
 			this.xVel ++;
 		}
-		// console.log("right here");
 		dX = this.xVel;		
 	}
 	if ( keys["up"] ){
@@ -101,7 +99,6 @@ Player.prototype.move = function(first_argument) {
 
 	// check down collisions
 
-	// if(dY>0 ){
 		var nextY = this.y + dY - (this.height/2);
 		var ay = (this.y +(this.height/2) + dY) / 32 | 0;
 
@@ -115,10 +112,10 @@ Player.prototype.move = function(first_argument) {
 
 
 		if(leftTile ==1) {
-			level.addToHighLights(left, ay, "#FDB1B1");
+			level.addToHighLights(left, ay, "#EDE5E2");
 		}
 		if( rightTile == 1) {
-			level.addToHighLights(right, ay, "#FDB1B1");
+			level.addToHighLights(right, ay, "#EDE5E2");
 		}
 
 
@@ -134,10 +131,7 @@ Player.prototype.move = function(first_argument) {
 			this.onGround = false;
 			tempY = this.y + dY;
 		}
-	// }
 
-
-	// jumping
 		if( dX> 0){
 			//moving right
 			var nextX = this.x + dX + (this.width/2); // the nextX 
@@ -151,15 +145,15 @@ Player.prototype.move = function(first_argument) {
 
 			// For DEBUGGINS
 			if(tileX1 ==1) {
-				level.addToHighLights(ax, yTop, "white");
+				level.addToHighLights(ax, yTop, "#FDB1B1");
 			}
 			if( tileX2 == 1) {
-				level.addToHighLights(ax, yBotttom, "white");
+				level.addToHighLights(ax, yBotttom, "#FDB1B1");
 			}
 
 			if(tileX1==1 || tileX2==1){ // collision
-				tempX = (ax * 32) - (this.width/2);
-				this.xVel = 0;
+				tempX = (ax * 32) - (this.width/2) ;
+				// this.xVel = 0;
 				
 			}else{
 				tempX =this.x +dX;
@@ -178,10 +172,10 @@ Player.prototype.move = function(first_argument) {
 			var tileX1 = level.getTile(ax, yTop);
 
 			if(tileX1 ==1) {
-				level.addToHighLights(ax, yTop, "#EDE5E2");
+				level.addToHighLights(ax, yTop, "#9BF0E9");
 			}
 			if( tileX2 == 1) {
-				level.addToHighLights(ax, yBotttom, "#EDE5E2");
+				level.addToHighLights(ax, yBotttom, "#9BF0E9");
 			}
 
 
@@ -193,10 +187,6 @@ Player.prototype.move = function(first_argument) {
 				this.blocked = false;
 			}
 		}	
-
-	// if ( !this.onGround ) {
-	// 	this.y = 3;
-	// }
 
 	this.x = tempX;
 	this.y = tempY;
@@ -287,7 +277,10 @@ Player.prototype.draw = function(ctx) {
 
 
 	ctx.fillStyle = "red";
-	ctx.fillRect(this.x - this.width/2, this.y - this.height/2, this.width, this.height);
-
+	if(keys["down"]){
+		ctx.fillRect(this.x - this.width/2, this.y, this.width, this.height/2);
+	}else{
+		ctx.fillRect(this.x - this.width/2, this.y - this.height/2, this.width, this.height);
+	}
 	// ctx.drawImage(this.image, frame*16, 0, 16, 26, this.x, this.y, this.height, this.height);
 };
